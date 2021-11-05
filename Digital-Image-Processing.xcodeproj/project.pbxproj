@@ -11,6 +11,16 @@
 		D02B44CD27358E210036888E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02B44CC27358E210036888E /* ContentView.swift */; };
 		D02B44CF27358E210036888E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D02B44CE27358E210036888E /* Assets.xcassets */; };
 		D02B44D227358E210036888E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D02B44D127358E210036888E /* Preview Assets.xcassets */; };
+		D02B44DD27358F120036888E /* SheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02B44DB27358F120036888E /* SheetView.swift */; };
+		D02B44DE27358F120036888E /* HoldableButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02B44DC27358F120036888E /* HoldableButton.swift */; };
+		D02B44E027358F590036888E /* ImageProcessingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02B44DF27358F590036888E /* ImageProcessingView.swift */; };
+		D02B44E227358FCF0036888E /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02B44E127358FCF0036888E /* ImageView.swift */; };
+		D02B44E527359A5B0036888E /* NSImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02B44E427359A5B0036888E /* NSImageExtensions.swift */; };
+		D02B44EA27359C3B0036888E /* ImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02B44E927359C3B0036888E /* ImageProcessor.swift */; };
+		D02B44EE27359EF00036888E /* BoxBlurImageProcessor.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02B44ED27359EF00036888E /* BoxBlurImageProcessor.swift.swift */; };
+		D02B44F02735A0770036888E /* GaussianBlurImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02B44EF2735A0770036888E /* GaussianBlurImageProcessor.swift */; };
+		D02B44F22735A0900036888E /* MedianFilterImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02B44F12735A0900036888E /* MedianFilterImageProcessor.swift */; };
+		D02B44F42735A0A30036888E /* SobelFilterImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02B44F32735A0A30036888E /* SobelFilterImageProcessor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +30,16 @@
 		D02B44CE27358E210036888E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D02B44D127358E210036888E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D02B44D327358E210036888E /* Digital_Image_Processing.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Digital_Image_Processing.entitlements; sourceTree = "<group>"; };
+		D02B44DB27358F120036888E /* SheetView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetView.swift; sourceTree = "<group>"; };
+		D02B44DC27358F120036888E /* HoldableButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HoldableButton.swift; sourceTree = "<group>"; };
+		D02B44DF27358F590036888E /* ImageProcessingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcessingView.swift; sourceTree = "<group>"; };
+		D02B44E127358FCF0036888E /* ImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
+		D02B44E427359A5B0036888E /* NSImageExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSImageExtensions.swift; sourceTree = "<group>"; };
+		D02B44E927359C3B0036888E /* ImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcessor.swift; sourceTree = "<group>"; };
+		D02B44ED27359EF00036888E /* BoxBlurImageProcessor.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoxBlurImageProcessor.swift.swift; sourceTree = "<group>"; };
+		D02B44EF2735A0770036888E /* GaussianBlurImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaussianBlurImageProcessor.swift; sourceTree = "<group>"; };
+		D02B44F12735A0900036888E /* MedianFilterImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedianFilterImageProcessor.swift; sourceTree = "<group>"; };
+		D02B44F32735A0A30036888E /* SobelFilterImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SobelFilterImageProcessor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,8 +72,10 @@
 		D02B44C927358E210036888E /* Digital-Image-Processing */ = {
 			isa = PBXGroup;
 			children = (
+				D02B44E627359C1B0036888E /* Models */,
+				D02B44D927358EF70036888E /* Views */,
+				D02B44E327359A4C0036888E /* Utils */,
 				D02B44CA27358E210036888E /* Digital_Image_ProcessingApp.swift */,
-				D02B44CC27358E210036888E /* ContentView.swift */,
 				D02B44CE27358E210036888E /* Assets.xcassets */,
 				D02B44D327358E210036888E /* Digital_Image_Processing.entitlements */,
 				D02B44D027358E210036888E /* Preview Content */,
@@ -67,6 +89,46 @@
 				D02B44D127358E210036888E /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		D02B44D927358EF70036888E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D02B44DA27358F120036888E /* Universal */,
+				D02B44DF27358F590036888E /* ImageProcessingView.swift */,
+				D02B44CC27358E210036888E /* ContentView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		D02B44DA27358F120036888E /* Universal */ = {
+			isa = PBXGroup;
+			children = (
+				D02B44DB27358F120036888E /* SheetView.swift */,
+				D02B44DC27358F120036888E /* HoldableButton.swift */,
+				D02B44E127358FCF0036888E /* ImageView.swift */,
+			);
+			path = Universal;
+			sourceTree = "<group>";
+		};
+		D02B44E327359A4C0036888E /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				D02B44E427359A5B0036888E /* NSImageExtensions.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		D02B44E627359C1B0036888E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				D02B44E927359C3B0036888E /* ImageProcessor.swift */,
+				D02B44ED27359EF00036888E /* BoxBlurImageProcessor.swift.swift */,
+				D02B44EF2735A0770036888E /* GaussianBlurImageProcessor.swift */,
+				D02B44F12735A0900036888E /* MedianFilterImageProcessor.swift */,
+				D02B44F32735A0A30036888E /* SobelFilterImageProcessor.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -139,8 +201,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D02B44F02735A0770036888E /* GaussianBlurImageProcessor.swift in Sources */,
+				D02B44E227358FCF0036888E /* ImageView.swift in Sources */,
+				D02B44E027358F590036888E /* ImageProcessingView.swift in Sources */,
+				D02B44EA27359C3B0036888E /* ImageProcessor.swift in Sources */,
+				D02B44E527359A5B0036888E /* NSImageExtensions.swift in Sources */,
 				D02B44CD27358E210036888E /* ContentView.swift in Sources */,
+				D02B44DD27358F120036888E /* SheetView.swift in Sources */,
+				D02B44EE27359EF00036888E /* BoxBlurImageProcessor.swift.swift in Sources */,
+				D02B44DE27358F120036888E /* HoldableButton.swift in Sources */,
+				D02B44F22735A0900036888E /* MedianFilterImageProcessor.swift in Sources */,
 				D02B44CB27358E210036888E /* Digital_Image_ProcessingApp.swift in Sources */,
+				D02B44F42735A0A30036888E /* SobelFilterImageProcessor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

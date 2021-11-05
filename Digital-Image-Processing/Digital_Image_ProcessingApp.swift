@@ -12,6 +12,7 @@ struct Digital_Image_ProcessingApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .frame(minWidth: 600, maxWidth: .infinity, minHeight: 450, maxHeight: .infinity)
         }
     }
 }
