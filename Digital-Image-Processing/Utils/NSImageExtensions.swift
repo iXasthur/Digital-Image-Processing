@@ -8,6 +8,11 @@
 import AppKit
 
 extension NSImage {
+    var cgImage: CGImage? {
+        var rect = CGRect.init(origin: .zero, size: self.size)
+        return self.cgImage(forProposedRect: &rect, context: nil, hints: nil)
+    }
+    
     func withRoundedCorners(withRadius radius: CGFloat) -> NSImage {
         let rect = NSRect(origin: NSPoint.zero, size: size)
         if
@@ -32,13 +37,4 @@ extension NSImage {
 
         return self
     }
-}
-
-fileprivate extension NSImage {
-
-    var cgImage: CGImage? {
-        var rect = CGRect.init(origin: .zero, size: self.size)
-        return self.cgImage(forProposedRect: &rect, context: nil, hints: nil)
-    }
-
 }

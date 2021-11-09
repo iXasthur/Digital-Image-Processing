@@ -21,6 +21,13 @@ struct ImageProcessingView: View {
     @State private var selectedFilterType: ImageFilterType = .boxBlur
     @State private var selectedImage: NSImage? = nil
     
+    init() {
+        let samplePath = "/Users/ro/Downloads/filter-sample.png"
+        if FileManager.default.fileExists(atPath: samplePath) {
+            _selectedImage = .init(initialValue: NSImage(byReferencingFile: samplePath))
+        }
+    }
+    
     var imageSelectionButtonBody: some View {
         return Button("Open Image", action: {
             let openPanel = NSOpenPanel()
@@ -59,7 +66,7 @@ struct ImageProcessingView: View {
     var imageProcessor: ImageProcessor {
         switch selectedFilterType {
         case .boxBlur:
-            return BoxBlurImageProcessor()
+            return BoxBlurImageProcessor(boxSize: 3)
         case .gaussianBlur:
             return GaussianBlurImageProcessor()
         case .median:
@@ -100,21 +107,25 @@ struct ImageProcessingView: View {
                 Spacer()
                 
                 if selectedImage != nil {
-                    HStack {
-                        Spacer()
-                        
-                        VStack(alignment: .leading) {
-                            Text("Initial")
-                                .font(.headline)
-                            ImageView(image: selectedImage!)
-                        }
-                        
-                        Spacer()
-                        
-                        VStack(alignment: .leading) {
-                            Text("Processed")
-                                .font(.headline)
-                            ImageView(image: filteredImage!)
+                    VStack {
+                        HStack {
+                            Spacer()
+                            
+                            VStack(alignment: .leading) {
+                                Text("Initial")
+                                    .font(.headline)
+                                ImageView(image: selectedImage!)
+                            }
+                            
+                            Spacer()
+                            
+                            VStack(alignment: .leading) {
+                                Text("Processed")
+                                    .font(.headline)
+                                ImageView(image: filteredImage!)
+                            }
+                            
+                            Spacer()
                         }
                         
                         Spacer()
