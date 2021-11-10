@@ -18,13 +18,42 @@ fileprivate enum ImageFilterType: String, CaseIterable, Identifiable {
 }
 
 struct ImageProcessingView: View {
+    static private let defaultBlurBoxSize = 3
+    
+    @State private var checkedSampleImage: Bool = false
+    
     @State private var selectedFilterType: ImageFilterType = .boxBlur
     @State private var selectedImage: NSImage? = nil
+    @State private var filteredImage: NSImage? = nil
     
-    init() {
-        let samplePath = "/Users/ro/Downloads/filter-sample.png"
-        if FileManager.default.fileExists(atPath: samplePath) {
-            _selectedImage = .init(initialValue: NSImage(byReferencingFile: samplePath))
+    @State private var boxBlurBoxSizeD: Double = Double(defaultBlurBoxSize)
+    
+    @State private var filterWorkItem: DispatchWorkItem? = nil
+    
+    func filterImage() {
+        filterWorkItem?.cancel()
+        filterWorkItem = nil
+        filteredImage = nil
+        
+        if let selectedImage = selectedImage {
+            var wi: DispatchWorkItem? = nil
+            wi = DispatchWorkItem {
+                do {
+                    let filtered = try imageProcessor.process(image: selectedImage, wi: wi!)
+                    DispatchQueue.main.async {
+                        self.filteredImage = filtered
+                    }
+                } catch {
+                    print("Error processing image: \(error)")
+                }
+            }
+            
+            filterWorkItem = wi
+            
+            DispatchQueue.global(qos: .default).asyncAfter(
+                deadline: .now() + 0.5,
+                execute: wi!
+            )
         }
     }
     
@@ -41,32 +70,45 @@ struct ImageProcessingView: View {
                 if result.rawValue == NSApplication.ModalResponse.OK.rawValue {
                     let selectedPath = openPanel.url!.path
                     self.selectedImage = NSImage(byReferencingFile: selectedPath)!
+                    self.filterImage()
                 }
             }
         })
     }
     
     var filterConfiguratorBody: AnyView {
-        let view: AnyView = AnyView(EmptyView())
-        
         switch selectedFilterType {
         case .boxBlur:
-            break
+            return AnyView(
+                VStack(alignment: .leading) {
+                    Text("Box Size")
+                    HStack {
+                        Slider(
+                            value: $boxBlurBoxSizeD,
+                            in: 1...15,
+                            step: 2
+                        ).onChange(of: boxBlurBoxSizeD) { _ in
+                            filterImage()
+                        }
+                        Text("\(Int(boxBlurBoxSizeD))")
+                            .frame(minWidth: 20, alignment: .trailing)
+                    }
+                }
+                    .padding(.top)
+            )
         case .gaussianBlur:
-            break
+            return AnyView(EmptyView())
         case .median:
-            break
+            return AnyView(EmptyView())
         case .sobel:
-            break
+            return AnyView(EmptyView())
         }
-        
-        return view
     }
     
     var imageProcessor: ImageProcessor {
         switch selectedFilterType {
         case .boxBlur:
-            return BoxBlurImageProcessor(boxSize: 3)
+            return BoxBlurImageProcessor(boxSize: Int(boxBlurBoxSizeD))
         case .gaussianBlur:
             return GaussianBlurImageProcessor()
         case .median:
@@ -74,14 +116,6 @@ struct ImageProcessingView: View {
         case .sobel:
             return SobelFilterImageProcessor()
         }
-    }
-    
-    var filteredImage: NSImage? {
-        if let selectedImage = selectedImage {
-            return imageProcessor.process(image: selectedImage)
-        }
-        
-        return nil
     }
     
     var body: some View {
@@ -93,6 +127,9 @@ struct ImageProcessingView: View {
             }
             .font(.headline)
             .pickerStyle(SegmentedPickerStyle())
+            .onChange(of: selectedFilterType) { _ in
+                filterImage()
+            }
             
             HStack {
                 VStack(alignment: .leading) {
@@ -100,7 +137,7 @@ struct ImageProcessingView: View {
                     filterConfiguratorBody
                     Spacer()
                 }
-                .frame(minWidth: 180, alignment: .leading)
+                .frame(width: 180, alignment: .leading)
                 
                 Divider()
                 
@@ -109,23 +146,30 @@ struct ImageProcessingView: View {
                 if selectedImage != nil {
                     VStack {
                         HStack {
-                            Spacer()
+                            Text("Initial")
+                                .font(.headline)
+                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                             
-                            VStack(alignment: .leading) {
-                                Text("Initial")
-                                    .font(.headline)
-                                ImageView(image: selectedImage!)
+                            Text("Processed")
+                                .font(.headline)
+                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                        }
+                        
+                        HStack {
+                            ImageView(image: selectedImage!)
+                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                            
+                            HStack {
+                                if filteredImage != nil {
+                                    ImageView(image: filteredImage!)
+                                } else {
+                                    Spacer()
+                                    ProgressView()
+                                        .scaleEffect(0.75, anchor: .center)
+                                    Spacer()
+                                }
                             }
-                            
-                            Spacer()
-                            
-                            VStack(alignment: .leading) {
-                                Text("Processed")
-                                    .font(.headline)
-                                ImageView(image: filteredImage!)
-                            }
-                            
-                            Spacer()
+                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                         }
                         
                         Spacer()
@@ -139,6 +183,17 @@ struct ImageProcessingView: View {
             .padding(.top, 8)
             
             Spacer()
+        }
+        .onAppear {
+            if !checkedSampleImage {
+                checkedSampleImage = true
+                
+                let samplePath = "/Users/ro/Downloads/filter-sample.png"
+                if FileManager.default.fileExists(atPath: samplePath) {
+                    selectedImage = NSImage(byReferencingFile: samplePath)!
+                    filterImage()
+                }
+            }
         }
     }
 }

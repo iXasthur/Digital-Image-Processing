@@ -7,6 +7,10 @@
 
 import AppKit
 
+enum ImageProcessorError: Error {
+    case cancelled(String)
+}
+
 protocol ImageProcessor {
-    func process(image: NSImage) -> NSImage
+    func process(image: NSImage, wi: DispatchWorkItem) throws -> NSImage
 }

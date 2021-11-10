@@ -8,7 +8,7 @@
 import AppKit
 
 class MedianFilterImageProcessor: ImageProcessor {
-    func process(image: NSImage) -> NSImage {
+    func process(image: NSImage, wi: DispatchWorkItem) -> NSImage {
         return image
     }
 }

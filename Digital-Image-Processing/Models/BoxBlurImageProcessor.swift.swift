@@ -18,7 +18,7 @@ class BoxBlurImageProcessor: ImageProcessor {
         self.boxSize = boxSize
     }
     
-    func process(image: NSImage) -> NSImage {
+    func process(image: NSImage, wi: DispatchWorkItem) throws -> NSImage {
         let ds = boxSize / 2
         
         let cgImage = image.cgImage!.copy()!
@@ -28,6 +28,10 @@ class BoxBlurImageProcessor: ImageProcessor {
         
         for x in ds..<cgImage.width-ds {
             for y in ds..<cgImage.height-ds {
+                if wi.isCancelled {
+                    throw ImageProcessorError.cancelled("Box blur \(boxSize)x\(boxSize) was cancelled")
+                }
+                
                 var rf: CGFloat = 0
                 var gf: CGFloat = 0
                 var bf: CGFloat = 0
@@ -52,10 +56,17 @@ class BoxBlurImageProcessor: ImageProcessor {
                 data.setColor(color, atX: x, y: y)
             }
         }
-            
+        
+        let cropRect: CGRect = CGRect(
+            x: ds,
+            y: ds,
+            width: Int(image.size.width) - (2 * ds),
+            height: Int(image.size.height) - (2 * ds)
+        )
+        let cgProcessed = data.cgImage!.cropping(to: cropRect)!
         return NSImage(
-            cgImage: data.cgImage!,
-            size: NSSize(width: data.cgImage!.width, height: data.cgImage!.height)
+            cgImage: cgProcessed,
+            size: NSSize(width: cgProcessed.width, height: cgProcessed.height)
         )
     }
 }
