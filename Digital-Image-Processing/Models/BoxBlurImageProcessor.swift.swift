@@ -21,10 +21,10 @@ class BoxBlurImageProcessor: ImageProcessor {
     func process(image: NSImage, wi: DispatchWorkItem) throws -> NSImage {
         let ds = boxSize / 2
         
-        let cgImage = image.cgImage!.copy()!
+        let cgImage = image.cgImage!
         
         let initialData = NSBitmapImageRep(cgImage: cgImage)
-        let data = initialData.converting(to: .genericRGB, renderingIntent: .default)!
+        let data = initialData.converting(to: .sRGB, renderingIntent: .default)!
         
         for x in ds..<cgImage.width-ds {
             for y in ds..<cgImage.height-ds {

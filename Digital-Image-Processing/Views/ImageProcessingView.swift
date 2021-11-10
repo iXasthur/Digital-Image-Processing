@@ -19,6 +19,7 @@ fileprivate enum ImageFilterType: String, CaseIterable, Identifiable {
 
 struct ImageProcessingView: View {
     static private let defaultBlurBoxSize = 3
+    static private let defaultGaussianStDev = 1
     
     @State private var checkedSampleImage: Bool = false
     
@@ -27,6 +28,7 @@ struct ImageProcessingView: View {
     @State private var filteredImage: NSImage? = nil
     
     @State private var boxBlurBoxSizeD: Double = Double(defaultBlurBoxSize)
+    @State private var gaussianStDevD: Double = Double(defaultGaussianStDev)
     
     @State private var filterWorkItem: DispatchWorkItem? = nil
     
@@ -85,7 +87,7 @@ struct ImageProcessingView: View {
                     HStack {
                         Slider(
                             value: $boxBlurBoxSizeD,
-                            in: 1...15,
+                            in: 3...15,
                             step: 2
                         ).onChange(of: boxBlurBoxSizeD) { _ in
                             filterImage()
@@ -97,7 +99,23 @@ struct ImageProcessingView: View {
                     .padding(.top)
             )
         case .gaussianBlur:
-            return AnyView(EmptyView())
+            return AnyView(
+                VStack(alignment: .leading) {
+                    Text("Radius")
+                    HStack {
+                        Slider(
+                            value: $gaussianStDevD,
+                            in: 1...10,
+                            step: 1
+                        ).onChange(of: gaussianStDevD) { _ in
+                            filterImage()
+                        }
+                        Text("\(Int(gaussianStDevD))")
+                            .frame(minWidth: 20, alignment: .trailing)
+                    }
+                }
+                    .padding(.top)
+            )
         case .median:
             return AnyView(EmptyView())
         case .sobel:
@@ -110,7 +128,7 @@ struct ImageProcessingView: View {
         case .boxBlur:
             return BoxBlurImageProcessor(boxSize: Int(boxBlurBoxSizeD))
         case .gaussianBlur:
-            return GaussianBlurImageProcessor()
+            return GaussianBlurImageProcessor(stDev: Int(gaussianStDevD))
         case .median:
             return MedianFilterImageProcessor()
         case .sobel:
