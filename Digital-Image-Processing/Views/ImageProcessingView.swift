@@ -19,7 +19,8 @@ fileprivate enum ImageFilterType: String, CaseIterable, Identifiable {
 
 struct ImageProcessingView: View {
     static private let defaultBlurBoxSize = 3
-    static private let defaultGaussianStDev = 1
+    static private let defaultGaussianRadius = 1
+    static private let defaultMedianRadius = 1
     
     @State private var checkedSampleImage: Bool = false
     
@@ -28,7 +29,8 @@ struct ImageProcessingView: View {
     @State private var filteredImage: NSImage? = nil
     
     @State private var boxBlurBoxSizeD: Double = Double(defaultBlurBoxSize)
-    @State private var gaussianStDevD: Double = Double(defaultGaussianStDev)
+    @State private var gaussianRadiusD: Double = Double(defaultGaussianRadius)
+    @State private var medianRadiusD: Double = Double(defaultMedianRadius)
     
     @State private var filterWorkItem: DispatchWorkItem? = nil
     
@@ -104,20 +106,36 @@ struct ImageProcessingView: View {
                     Text("Radius")
                     HStack {
                         Slider(
-                            value: $gaussianStDevD,
+                            value: $gaussianRadiusD,
                             in: 1...10,
                             step: 1
-                        ).onChange(of: gaussianStDevD) { _ in
+                        ).onChange(of: gaussianRadiusD) { _ in
                             filterImage()
                         }
-                        Text("\(Int(gaussianStDevD))")
+                        Text("\(Int(gaussianRadiusD))")
                             .frame(minWidth: 20, alignment: .trailing)
                     }
                 }
                     .padding(.top)
             )
         case .median:
-            return AnyView(EmptyView())
+            return AnyView(
+                VStack(alignment: .leading) {
+                    Text("Radius")
+                    HStack {
+                        Slider(
+                            value: $medianRadiusD,
+                            in: 1...10,
+                            step: 1
+                        ).onChange(of: medianRadiusD) { _ in
+                            filterImage()
+                        }
+                        Text("\(Int(medianRadiusD))")
+                            .frame(minWidth: 20, alignment: .trailing)
+                    }
+                }
+                    .padding(.top)
+            )
         case .sobel:
             return AnyView(EmptyView())
         }
@@ -128,9 +146,9 @@ struct ImageProcessingView: View {
         case .boxBlur:
             return BoxBlurImageProcessor(boxSize: Int(boxBlurBoxSizeD))
         case .gaussianBlur:
-            return GaussianBlurImageProcessor(stDev: Int(gaussianStDevD))
+            return GaussianBlurImageProcessor(radius: Int(gaussianRadiusD))
         case .median:
-            return MedianFilterImageProcessor()
+            return MedianFilterImageProcessor(radius: Int(medianRadiusD))
         case .sobel:
             return SobelFilterImageProcessor()
         }
@@ -206,7 +224,7 @@ struct ImageProcessingView: View {
             if !checkedSampleImage {
                 checkedSampleImage = true
                 
-                let samplePath = "/Users/ro/Downloads/filter-sample.png"
+                let samplePath = "/Users/ro/Downloads/filter-sample.jpg"
                 if FileManager.default.fileExists(atPath: samplePath) {
                     selectedImage = NSImage(byReferencingFile: samplePath)!
                     filterImage()

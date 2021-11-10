@@ -21,13 +21,13 @@ class BoxBlurImageProcessor: ImageProcessor {
     func process(image: NSImage, wi: DispatchWorkItem) throws -> NSImage {
         let ds = boxSize / 2
         
-        let cgImage = image.cgImage!
+        let initialWidth = image.cgImage!.width
+        let initialHeight = image.cgImage!.height
+        let initialBitmap = image.getBitmapCopy(colorSpace: .sRGB)
+        let processedBitmap = initialBitmap.copy() as! NSBitmapImageRep
         
-        let initialData = NSBitmapImageRep(cgImage: cgImage)
-        let data = initialData.converting(to: .sRGB, renderingIntent: .default)!
-        
-        for x in ds..<cgImage.width-ds {
-            for y in ds..<cgImage.height-ds {
+        for x in ds..<initialWidth-ds {
+            for y in ds..<initialHeight-ds {
                 if wi.isCancelled {
                     throw ImageProcessorError.cancelled("Box blur \(boxSize)x\(boxSize) was cancelled")
                 }
@@ -39,7 +39,7 @@ class BoxBlurImageProcessor: ImageProcessor {
 
                 for i in x-ds...x+ds {
                     for j in y-ds...y+ds {
-                        let pixel = initialData.colorAt(x: i, y: j)!
+                        let pixel = initialBitmap.colorAt(x: i, y: j)!
                         rf += pixel.redComponent
                         gf += pixel.greenComponent
                         bf += pixel.blueComponent
@@ -53,17 +53,11 @@ class BoxBlurImageProcessor: ImageProcessor {
                 af /= CGFloat(boxSize * boxSize)
 
                 let color = NSColor(calibratedRed: rf, green: gf, blue: bf, alpha: af)
-                data.setColor(color, atX: x, y: y)
+                processedBitmap.setColor(color, atX: x, y: y)
             }
         }
         
-        let cropRect: CGRect = CGRect(
-            x: ds,
-            y: ds,
-            width: Int(image.size.width) - (2 * ds),
-            height: Int(image.size.height) - (2 * ds)
-        )
-        let cgProcessed = data.cgImage!.cropping(to: cropRect)!
+        let cgProcessed = processedBitmap.cgImage!.withCroppedBorder(ds: ds)
         return NSImage(
             cgImage: cgProcessed,
             size: NSSize(width: cgProcessed.width, height: cgProcessed.height)

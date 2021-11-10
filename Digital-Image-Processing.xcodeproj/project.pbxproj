@@ -21,6 +21,7 @@
 		D02B44F02735A0770036888E /* GaussianBlurImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02B44EF2735A0770036888E /* GaussianBlurImageProcessor.swift */; };
 		D02B44F22735A0900036888E /* MedianFilterImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02B44F12735A0900036888E /* MedianFilterImageProcessor.swift */; };
 		D02B44F42735A0A30036888E /* SobelFilterImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02B44F32735A0A30036888E /* SobelFilterImageProcessor.swift */; };
+		D0E9C9F5273C25EF00F106BB /* CGImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E9C9F4273C25EF00F106BB /* CGImageExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		D02B44EF2735A0770036888E /* GaussianBlurImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaussianBlurImageProcessor.swift; sourceTree = "<group>"; };
 		D02B44F12735A0900036888E /* MedianFilterImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedianFilterImageProcessor.swift; sourceTree = "<group>"; };
 		D02B44F32735A0A30036888E /* SobelFilterImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SobelFilterImageProcessor.swift; sourceTree = "<group>"; };
+		D0E9C9F4273C25EF00F106BB /* CGImageExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGImageExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +117,7 @@
 			isa = PBXGroup;
 			children = (
 				D02B44E427359A5B0036888E /* NSImageExtensions.swift */,
+				D0E9C9F4273C25EF00F106BB /* CGImageExtensions.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -213,6 +216,7 @@
 				D02B44F22735A0900036888E /* MedianFilterImageProcessor.swift in Sources */,
 				D02B44CB27358E210036888E /* Digital_Image_ProcessingApp.swift in Sources */,
 				D02B44F42735A0A30036888E /* SobelFilterImageProcessor.swift in Sources */,
+				D0E9C9F5273C25EF00F106BB /* CGImageExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

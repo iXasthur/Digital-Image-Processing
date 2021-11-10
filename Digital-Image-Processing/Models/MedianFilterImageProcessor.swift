@@ -8,14 +8,23 @@
 import AppKit
 
 class MedianFilterImageProcessor: ImageProcessor {
+    let radius: Int
+    
+    init(radius: Int) {
+        self.radius = radius
+    }
+    
     func process(image: NSImage, wi: DispatchWorkItem) throws -> NSImage {
-        let cgImage = image.cgImage!
-        let initialData = NSBitmapImageRep(cgImage: cgImage)
-        let data = initialData.converting(to: .sRGB, renderingIntent: .default)!
+        let initialWidth = image.cgImage!.width
+        let initialHeight = image.cgImage!.height
+        let initialBitmap = image.getBitmapCopy(colorSpace: .sRGB)
+        let processedBitmap = initialBitmap.copy() as! NSBitmapImageRep
         
-        throw ImageProcessorError.cancelled("Median filter is not implemented")
+//        if wi.isCancelled {
+//            throw ImageProcessorError.cancelled("Median filter r\(radius) was cancelled")
+//        }
         
-        let cgProcessed = data.cgImage!
+        let cgProcessed = processedBitmap.cgImage!.withCroppedBorder(ds: radius)
         return NSImage(
             cgImage: cgProcessed,
             size: NSSize(width: cgProcessed.width, height: cgProcessed.height)

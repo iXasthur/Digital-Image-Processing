@@ -37,4 +37,8 @@ extension NSImage {
 
         return self
     }
+    
+    func getBitmapCopy(colorSpace: NSColorSpace) -> NSBitmapImageRep {
+        return NSBitmapImageRep(cgImage: cgImage!).converting(to: colorSpace, renderingIntent: .default)!
+    }
 }

@@ -9,13 +9,14 @@ import AppKit
 
 class SobelFilterImageProcessor: ImageProcessor {
     func process(image: NSImage, wi: DispatchWorkItem) throws -> NSImage {
-        let cgImage = image.cgImage!
-        let initialData = NSBitmapImageRep(cgImage: cgImage)
-        let data = initialData.converting(to: .sRGB, renderingIntent: .default)!
+        let initialWidth = image.cgImage!.width
+        let initialHeight = image.cgImage!.height
+        let initialBitmap = image.getBitmapCopy(colorSpace: .sRGB)
+        let processedBitmap = initialBitmap.copy() as! NSBitmapImageRep
         
         throw ImageProcessorError.cancelled("Sobel filter is not implemented")
         
-        let cgProcessed = data.cgImage!
+        let cgProcessed = processedBitmap.cgImage!
         return NSImage(
             cgImage: cgProcessed,
             size: NSSize(width: cgProcessed.width, height: cgProcessed.height)

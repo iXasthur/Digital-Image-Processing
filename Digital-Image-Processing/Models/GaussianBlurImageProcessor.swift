@@ -8,18 +8,17 @@
 import AppKit
 
 class GaussianBlurImageProcessor: ImageProcessor {
-    let stDev: Int
+    let radius: Int
     
-    init(stDev: Int) {
-        self.stDev = stDev
+    init(radius: Int) {
+        self.radius = radius
     }
     
     func process(image: NSImage, wi: DispatchWorkItem) throws -> NSImage {
-        let cgImage = image.cgImage!
-        let initialData = NSBitmapImageRep(cgImage: cgImage)
-        let data = initialData.converting(to: .sRGB, renderingIntent: .default)!
-        
-        let radius = stDev
+        let initialWidth = image.cgImage!.width
+        let initialHeight = image.cgImage!.height
+        let initialBitmap = image.getBitmapCopy(colorSpace: .sRGB)
+        let processedBitmap = initialBitmap.copy() as! NSBitmapImageRep
         
         // We scale the sigma value in proportion to the radius
         // Setting the minimum standard deviation as a baseline
@@ -58,10 +57,10 @@ class GaussianBlurImageProcessor: ImageProcessor {
         
         // Ignoring the edges for ease of implementation
         // This will cause a thin border around the image that won't be processed
-        for x in radius..<(cgImage.width - radius) {
-            for y in radius..<(cgImage.height - radius) {
+        for x in radius..<(initialWidth - radius) {
+            for y in radius..<(initialHeight - radius) {
                 if wi.isCancelled {
-                    throw ImageProcessorError.cancelled("Gaussian blur r\(stDev) was cancelled")
+                    throw ImageProcessorError.cancelled("Gaussian blur r\(radius) was cancelled")
                 }
                 
                 var redValue = 0.0
@@ -80,7 +79,7 @@ class GaussianBlurImageProcessor: ImageProcessor {
                         // Multiply each channel by the weight of the pixel as specified by the kernel
                         let px = x - kernelX
                         let py = y - kernelY
-                        let pcolor = initialData.colorAt(x: px, y: py)!
+                        let pcolor = initialBitmap.colorAt(x: px, y: py)!
                         redValue += pcolor.redComponent * kernelValue
                         greenValue += pcolor.greenComponent * kernelValue
                         blueValue += pcolor.blueComponent * kernelValue
@@ -90,11 +89,11 @@ class GaussianBlurImageProcessor: ImageProcessor {
                 
                 // New RGB value for output image at position (x,y)
                 let color = NSColor(calibratedRed: redValue, green: greenValue, blue: blueValue, alpha: alphaValue)
-                data.setColor(color, atX: x, y: y)
+                processedBitmap.setColor(color, atX: x, y: y)
             }
         }
         
-        let cgProcessed = data.cgImage!
+        let cgProcessed = processedBitmap.cgImage!.withCroppedBorder(ds: radius)
         return NSImage(
             cgImage: cgProcessed,
             size: NSSize(width: cgProcessed.width, height: cgProcessed.height)
