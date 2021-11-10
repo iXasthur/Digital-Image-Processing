@@ -125,7 +125,7 @@ struct ImageProcessingView: View {
                     HStack {
                         Slider(
                             value: $medianRadiusD,
-                            in: 1...10,
+                            in: 1...5,
                             step: 1
                         ).onChange(of: medianRadiusD) { _ in
                             filterImage()
@@ -224,7 +224,7 @@ struct ImageProcessingView: View {
             if !checkedSampleImage {
                 checkedSampleImage = true
                 
-                let samplePath = "/Users/ro/Downloads/filter-sample.jpg"
+                let samplePath = "/Users/ro/Downloads/filter-sample.png"
                 if FileManager.default.fileExists(atPath: samplePath) {
                     selectedImage = NSImage(byReferencingFile: samplePath)!
                     filterImage()
