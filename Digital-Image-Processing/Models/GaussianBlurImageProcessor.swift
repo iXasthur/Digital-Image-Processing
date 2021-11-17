@@ -22,7 +22,7 @@ class GaussianBlurImageProcessor: ImageProcessor {
         
         // We scale the sigma value in proportion to the radius
         // Setting the minimum standard deviation as a baseline
-        let sigma = max(Double(radius / 2), 1)
+        let sigma = max(Double(radius / 3), 1)
         
         // Enforces odd width kernel which ensures a center pixel is always available
         let kernelWidth = (2 * radius) + 1
